@@ -1,62 +1,42 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Potwierdzenie zaproszenia</title>
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      font-family: Arial, sans-serif;
-      background: #f5f5f2;
-      color: #222;
-    }
-
-    .card {
-      width: 100%;
-      max-width: 560px;
-      background: #fff;
-      border-radius: 16px;
-      padding: 40px 28px;
-      text-align: center;
-      box-shadow: 0 8px 30px rgba(0,0,0,.08);
-    }
-
-    h1 {
-      margin: 0 0 16px;
-      font-size: 30px;
-    }
-
-    p {
-      margin: 0 0 28px;
-      color: #666;
-      line-height: 1.6;
-    }
-
-    .status {
-      display: inline-block;
-      padding: 10px 16px;
-      border-radius: 999px;
-      background: #eef7ee;
-      color: #28632d;
-      font-weight: 600;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="preload" as="video" href="background.webm" type="video/webm">
+<title>RSVP</title>
+<style>
+:root{--blue:#173263;--max:540px}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#172033;background:var(--blue)}.bg{position:fixed;inset:0;z-index:0;background:var(--blue);overflow:hidden}.bg video{width:100%;height:100%;object-fit:cover;filter:saturate(.9) contrast(.95)}.bg:after{content:"";position:absolute;inset:0;background:rgba(23,50,99,.58);backdrop-filter:blur(4px)}.wrap{position:relative;z-index:1;min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:18px 14px}.card{width:min(100%,var(--max));background:rgba(255,255,255,.96);border-radius:18px;padding:20px 18px;box-shadow:0 18px 50px #0004}.logo{text-align:center}.logo img{display:block;width:min(58%,250px);height:auto;margin:auto}.rule{border:0;border-top:1px solid #17326330;margin:14px 0 12px}.lang{display:flex;justify-content:center;gap:8px;margin-bottom:20px}.lang button{min-width:54px;padding:8px 14px;border:1px solid #17326355;border-radius:999px;background:#fff;color:var(--blue);font-weight:700}.lang button.active{background:var(--blue);color:#fff}.event{text-align:center;color:var(--blue);margin-bottom:22px}.event h1{margin:0 0 8px;font-size:clamp(23px,6vw,30px);line-height:1.16}.date{margin:0;font-size:17px;line-height:1.5;font-weight:650}.guest{display:none;text-align:center;margin:18px 0 22px;padding:14px;border-radius:13px;background:#17326312}.name{margin-top:4px;color:var(--blue);font-size:21px;font-weight:750}.info{display:none;font-size:15px;line-height:1.55}.info p{margin:0 0 13px}.info ul{margin:7px 0 15px;padding-left:23px}.warning{font-weight:750}.confirm{display:none;width:100%;margin-top:22px;padding:15px;border:0;border-radius:12px;background:var(--blue);color:#fff;font-size:17px;font-weight:750}.confirm:disabled{opacity:.55}.message{display:none;margin:16px 0 0;padding:13px 14px;border-radius:12px;text-align:center;line-height:1.45}.error{display:block;background:#fdecef;color:#8b1e2d}.success{display:block;background:#eaf7ef;color:#17643a}.notice{display:block;background:#edf2fa;color:var(--blue)}.footer{display:none;margin-top:20px;padding-top:15px;border-top:1px solid #17326326;text-align:center;font-size:13px;color:#5f6878}.footer a{color:var(--blue);font-weight:650}.loading{text-align:center;color:#5f6878;padding:12px 0 4px}@media(max-width:380px){.card{padding:17px 14px}.logo img{width:64%}.info{font-size:14.5px}}
+</style>
 </head>
 <body>
-  <main class="card">
-    <h1>Potwierdzenie zaproszenia</h1>
-    <p>
-      Strona działa poprawnie. To jest wersja startowa naszego systemu RSVP.
-    </p>
-    <div class="status">✓ Cloudflare Pages działa</div>
-  </main>
-</body>
-</html>
+<div class="bg"><video autoplay muted loop playsinline preload="auto"><source src="background.webm" type="video/webm"><source src="background.mp4" type="video/mp4"></video></div>
+<main class="wrap"><section class="card">
+<div class="logo"><img src="logo.png" alt="Logo"></div><hr class="rule">
+<div class="lang"><button type="button" data-lang="pl" id="pl">PL</button><button type="button" data-lang="en" id="en">EN</button></div>
+<div class="event"><h1 id="title"></h1></div>
+<div id="loading" class="loading"></div>
+<div id="guest" class="guest"><div id="guestName" class="name"></div></div>
+<div id="eventDetails" class="event"><p class="date" id="date"></p></div>
+<div id="info" class="info"><p id="important"></p><p><strong id="accept"></strong></p><ul><li id="passport"></li><li id="diplomatic"></li><li id="china"></li></ul><p id="notAccepted" class="warning"></p></div>
+<button id="confirm" class="confirm" type="button"></button><div id="result" class="message" role="status" aria-live="polite"></div>
+<div id="footer" class="footer"><span id="footerText"></span><a href="mailto:beijing.events@msz.gov.pl">beijing.events@msz.gov.pl</a></div>
+</section></main>
+<script>
+const SUPABASE_URL="https://wzilnnmogeqoomnyhhst.supabase.co";
+const SUPABASE_KEY="sb_publishable_G_Tfcw-gtbnAfqR_bNev4Q_P7GZS1SG";
+const I={
+pl:{title:"Święto Wojska Polskiego",date:"27 sierpnia 2026 r. (czwartek)<br>godz. 18:00",important:"<strong>Ważne!</strong> Każdy gość przed wejściem na wydarzenie musi okazać oryginalny, fizyczny dokument tożsamości. Uzupełnij ten formularz danymi, które znajdują się w dokumencie którym się posłużysz.",accept:"Akceptujemy tylko:",passport:"Paszport",diplomatic:"ID dyplomatyczne",china:"ID wydane przez władze Chińskiej Republiki Ludowej",notAccepted:"Nie będą akceptowane: kopie, skany i zdjęcia w smartfonach.",confirm:"Potwierdzam uczestnictwo",loading:"Sprawdzanie zaproszenia…",saving:"Potwierdzanie…",success:"Dziękujemy. Uczestnictwo zostało potwierdzone.",confirmedBtn:"Potwierdzone",already:"To zaproszenie zostało już potwierdzone.",invalid:"Nieprawidłowy link.",error:"Wystąpił błąd połączenia. Spróbuj ponownie.",footer:"W przypadku jakichkolwiek zmian daj nam znać na "},
+en:{title:"Polish Armed Forces Day Reception",date:"Thursday, August 27, 2026 at 18:00",important:"<strong>Important!</strong> Every guest must present an original, physical ID document before entering the event. Complete this form with the data found on your ID.",accept:"We only accept:",passport:"Passport",diplomatic:"Diplomatic ID",china:"ID issued by the authorities of the People's Republic of China",notAccepted:"Copies, scans, and photos on smartphones will not be accepted.",confirm:"I confirm my attendance",loading:"Checking invitation…",saving:"Confirming…",success:"Thank you. Your attendance has been confirmed.",confirmedBtn:"Confirmed",already:"This invitation has already been confirmed.",invalid:"Invalid link.",error:"Connection error. Please try again.",footer:"If you have any changes let us know @ "}
+};
+const $=id=>document.getElementById(id), token=new URLSearchParams(location.search).get("t");
+let lang=(navigator.language||"en").toLowerCase().startsWith("pl")?"pl":"en", state="";
+function msg(text,type,s=""){let r=$("result");r.textContent=text;r.className="message "+type;r.dataset.state=s;state=s}
+function apply(){let d=I[lang];document.documentElement.lang=lang;document.title=d.title+" – RSVP";$("pl").classList.toggle("active",lang==="pl");$("en").classList.toggle("active",lang==="en");$("title").textContent=d.title;$("date").innerHTML=d.date;$("important").innerHTML=d.important;$("accept").textContent=d.accept;$("passport").textContent=d.passport;$("diplomatic").textContent=d.diplomatic;$("china").textContent=d.china;$("notAccepted").textContent=d.notAccepted;$("confirm").textContent=(state==="success"||state==="already")?d.confirmedBtn:d.confirm;$("footerText").textContent=d.footer;if($("loading").dataset.active==="1")$("loading").textContent=d.loading;if(state==="invalid")msg(d.invalid,"error","invalid");if(state==="already")msg(d.already,"notice","already");if(state==="success")msg(d.success,"success","success");if(state==="error")msg(d.error,"error","error")}
+async function rpc(name,payload){let r=await fetch(`${SUPABASE_URL}/rest/v1/rpc/${name}`,{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY},body:JSON.stringify(payload)});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
+async function check(){let d=I[lang];$("loading").dataset.active="1";$("loading").textContent=d.loading;if(!token){$("loading").style.display="none";msg(d.invalid,"error","invalid");return}try{let data=await rpc("check_invitation",{p_hash:token});if(!Array.isArray(data)||!data.length||!data[0].valid){$("loading").style.display="none";msg(I[lang].invalid,"error","invalid");return}let row=data[0];$("loading").style.display="none";$("loading").dataset.active="0";$("guestName").textContent=[row.first_name,row.last_name].filter(Boolean).join(" ");$("guest").style.display="block";$("info").style.display="block";$("footer").style.display="block";if(row.already_confirmed){$("confirm").style.display="block";$("confirm").disabled=true;$("confirm").textContent=I[lang].confirmedBtn;msg(I[lang].already,"notice","already")}else{$("confirm").style.display="block"}}catch(e){console.error(e);$("loading").style.display="none";msg(I[lang].error,"error","error")}}
+$("confirm").addEventListener("click",async()=>{let b=$("confirm");b.disabled=true;b.textContent=I[lang].saving;$("result").className="message";state="";try{let data=await rpc("confirm_invitation",{p_hash:token}),row=Array.isArray(data)?data[0]:null;if(row&&row.success){b.disabled=true;b.textContent=I[lang].confirmedBtn;msg(I[lang].success,"success","success")}else if(row&&row.already_confirmed){b.disabled=true;b.textContent=I[lang].confirmedBtn;msg(I[lang].already,"notice","already")}else{b.style.display="none";msg(I[lang].invalid,"error","invalid")}}catch(e){console.error(e);b.disabled=false;b.textContent=I[lang].confirm;msg(I[lang].error,"error","error")}});
+document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>{lang=b.dataset.lang;apply()}));
+apply();check();
+</script>
+</body></html>
