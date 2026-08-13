@@ -6,21 +6,57 @@
 <link rel="preload" as="video" href="background.webm" type="video/webm">
 <title>RSVP</title>
 <style>
-:root{--blue:#173263;--max:540px}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#172033;background:var(--blue)}.bg{position:fixed;inset:0;z-index:0;background:var(--blue);overflow:hidden}.bg video{width:100%;height:100%;object-fit:cover;filter:saturate(.9) contrast(.95)}.bg:after{content:"";position:absolute;inset:0;background:rgba(23,50,99,.58);backdrop-filter:blur(4px)}.wrap{position:relative;z-index:1;min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:18px 14px}.card{width:min(100%,var(--max));background:rgba(255,255,255,.96);border-radius:18px;padding:20px 18px;box-shadow:0 18px 50px #0004}.logo{text-align:center}.logo img{display:block;width:min(58%,250px);height:auto;margin:auto}.rule{border:0;border-top:1px solid #17326330;margin:14px 0 12px}.lang{display:flex;justify-content:center;gap:8px;margin-bottom:20px}.lang button{min-width:54px;padding:8px 14px;border:1px solid #17326355;border-radius:999px;background:#fff;color:var(--blue);font-weight:700}.lang button.active{background:var(--blue);color:#fff}.event{text-align:center;color:var(--blue);margin-bottom:22px}.event h1{margin:0 0 8px;font-size:clamp(23px,6vw,30px);line-height:1.16}.date{margin:0;font-size:17px;line-height:1.5;font-weight:650}.guest{display:none;text-align:center;margin:18px 0 22px;padding:14px;border-radius:13px;background:#17326312}.name{margin-top:4px;color:var(--blue);font-size:21px;font-weight:750}.info{display:none;font-size:15px;line-height:1.55}.info p{margin:0 0 13px}.info ul{margin:7px 0 15px;padding-left:23px}.warning{font-weight:750}.confirm{display:none;width:100%;margin-top:22px;padding:15px;border:0;border-radius:12px;background:var(--blue);color:#fff;font-size:17px;font-weight:750}.confirm:disabled{opacity:.55}.message{display:none;margin:16px 0 0;padding:13px 14px;border-radius:12px;text-align:center;line-height:1.45}.error{display:block;background:#fdecef;color:#8b1e2d}.success{display:block;background:#eaf7ef;color:#17643a}.notice{display:block;background:#edf2fa;color:var(--blue)}.footer{display:none;margin-top:20px;padding-top:15px;border-top:1px solid #17326326;text-align:center;font-size:13px;color:#5f6878}.footer a{color:var(--blue);font-weight:650}.loading{text-align:center;color:#5f6878;padding:12px 0 4px}@media(max-width:380px){.card{padding:17px 14px}.logo img{width:64%}.info{font-size:14.5px}}
+:root{--blue:#173263;--blue2:#0f2a58;--text:#0e1d3d;--muted:#5b6575;--max:540px}
+*{box-sizing:border-box}html,body{min-height:100%}
+body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--text);background:var(--blue);overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--blue)}
+.bg video{width:100%;height:100%;object-fit:cover;filter:saturate(.9) contrast(.96)}
+.bg::after{content:"";position:absolute;inset:0;background:rgba(16,36,76,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.wrap{position:relative;z-index:1;min-height:100vh;min-height:100dvh;display:flex;justify-content:center;align-items:flex-start;padding:14px}
+.card{width:min(100%,var(--max));background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.24)}
+.top{background:linear-gradient(180deg,var(--blue) 0%,var(--blue2) 100%);padding:24px 20px 18px}
+.logo{display:flex;justify-content:center;align-items:center;margin:0 auto 16px}
+.logo img{display:block;width:min(76%,320px);height:auto;margin:auto}
+.rule{border:0;border-top:1px solid rgba(255,255,255,.34);margin:12px 0 14px}
+.lang{display:flex;justify-content:center;gap:10px}
+.lang button{min-width:52px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.05);color:rgba(255,255,255,.62);font-size:14px;font-weight:700;cursor:pointer}
+.lang button.active{background:rgba(255,255,255,.17);color:#fff;border-color:rgba(255,255,255,.32)}
+.content{padding:30px 22px 22px}
+.event{text-align:center;color:var(--blue);margin-bottom:14px}
+.event h1{margin:0;font-size:clamp(28px,7vw,38px);line-height:1.1;font-weight:800}
+.guest{display:none;text-align:center;margin:22px 0 14px;padding:0;background:transparent}
+.name{color:var(--blue);font-size:clamp(30px,8vw,44px);line-height:1.08;font-weight:800;overflow-wrap:anywhere}
+#eventDetails{margin:16px 0 28px}.date{margin:0;text-align:center;color:var(--text);font-size:19px;line-height:1.55;font-weight:500}
+.info{display:none;font-size:16px;line-height:1.65;color:#16213d}.info p{margin:0 0 16px}.info ul{margin:8px 0 20px;padding-left:25px}.info li{margin:7px 0}.warning{font-weight:800;margin-top:18px!important}
+.confirm{display:none;width:100%;margin-top:24px;padding:16px;border:0;border-radius:12px;background:linear-gradient(180deg,var(--blue) 0%,var(--blue2) 100%);color:#fff;font-size:18px;font-weight:800;cursor:pointer}
+.confirm:disabled{opacity:.72;cursor:default}.message{display:none;margin:16px 0 0;padding:13px 14px;border-radius:12px;text-align:center;line-height:1.45}
+.message.error{display:block;color:#8b1e2d;background:#fdecef;border:1px solid #f4c8d0}.message.success{display:block;color:#17643a;background:#eaf7ef;border:1px solid #c5e7d1}.message.notice{display:block;color:var(--blue);background:#edf2fa;border:1px solid #d2dced}
+.footer{display:none;margin-top:24px;padding-top:18px;border-top:1px solid rgba(23,50,99,.18);text-align:center;font-size:14px;line-height:1.55;color:var(--muted)}.footer a{display:inline-block;color:#0b55c4;font-weight:650;text-decoration:none;overflow-wrap:anywhere}.loading{text-align:center;color:var(--muted);padding:10px 0 2px}
+@media(max-width:380px){.wrap{padding:8px}.top{padding:20px 16px 16px}.logo img{width:82%}.content{padding:24px 16px 18px}.info{font-size:15px}.date{font-size:17px}}
 </style>
 </head>
 <body>
-<div class="bg"><video autoplay muted loop playsinline preload="auto"><source src="background.webm" type="video/webm"><source src="background.mp4" type="video/mp4"></video></div>
+<div class="bg" aria-hidden="true"><video autoplay muted loop playsinline preload="auto"><source src="background.webm" type="video/webm"><source src="background.mp4" type="video/mp4"></video></div>
 <main class="wrap"><section class="card">
-<div class="logo"><img src="logo.png" alt="Logo"></div><hr class="rule">
-<div class="lang"><button type="button" data-lang="pl" id="pl">PL</button><button type="button" data-lang="en" id="en">EN</button></div>
-<div class="event"><h1 id="title"></h1></div>
-<div id="loading" class="loading"></div>
-<div id="guest" class="guest"><div id="guestName" class="name"></div></div>
-<div id="eventDetails" class="event"><p class="date" id="date"></p></div>
-<div id="info" class="info"><p id="important"></p><p><strong id="accept"></strong></p><ul><li id="passport"></li><li id="diplomatic"></li><li id="china"></li></ul><p id="notAccepted" class="warning"></p></div>
-<button id="confirm" class="confirm" type="button"></button><div id="result" class="message" role="status" aria-live="polite"></div>
-<div id="footer" class="footer"><span id="footerText"></span><a href="mailto:beijing.events@msz.gov.pl">beijing.events@msz.gov.pl</a></div>
+  <div class="top">
+    <div class="logo"><img src="logo.png" alt="Logo"></div>
+    <hr class="rule">
+    <div class="lang" aria-label="Language"><button type="button" id="langPl" data-lang="pl">PL</button><button type="button" id="langEn" data-lang="en">EN</button></div>
+  </div>
+  <div class="content">
+    <div class="event"><h1 id="eventTitle"></h1></div>
+    <div id="loading" class="loading"></div>
+    <div id="guest" class="guest"><div id="guestName" class="name"></div></div>
+    <div id="eventDetails" class="event"><p class="date" id="eventDate"></p></div>
+    <div id="info" class="info">
+      <p id="importantText"></p><p><strong id="acceptText"></strong></p>
+      <ul><li id="docPassport"></li><li id="docDiplomatic"></li><li id="docChina"></li></ul>
+      <p id="notAccepted" class="warning"></p>
+    </div>
+    <div id="footer" class="footer"><span id="footerText"></span><a href="mailto:beijing.events@msz.gov.pl">beijing.events@msz.gov.pl</a></div>
+    <button id="confirmBtn" class="confirm" type="button"></button>
+    <div id="result" class="message" role="status" aria-live="polite"></div>
+  </div>
 </section></main>
 <script>
 const SUPABASE_URL="https://wzilnnmogeqoomnyhhst.supabase.co";
